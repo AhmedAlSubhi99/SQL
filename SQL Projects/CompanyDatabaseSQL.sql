@@ -1,4 +1,4 @@
-CREATE DATABASE ComapnyDatabase;
+--CREATE DATABASE ComapnyDatabase;
 
 USE CompanyDatabase;
 
