@@ -12,6 +12,13 @@ GO
 USE UNIVERSITY;
 GO
 
+-- Department Table
+CREATE TABLE Department 
+(
+    Department_id INT PRIMARY KEY,
+    D_Name VARCHAR(100)
+);
+
 -- Faculty Table
 CREATE TABLE Faculty 
 (
@@ -19,7 +26,9 @@ CREATE TABLE Faculty
     F_Name VARCHAR(100),
     Mobile_No VARCHAR(15),
     Department VARCHAR(50),
-    Salary DECIMAL(10, 2)
+    Salary DECIMAL(10, 2),
+	Department_id INT,
+	FOREIGN KEY (Department_id) REFERENCES Department(Department_id)
 );
 
 -- Student Table
@@ -29,7 +38,17 @@ CREATE TABLE Student
     Fname VARCHAR(50),
     Lname VARCHAR(50),
     Phone_no VARCHAR(15),
-    DOB DATE
+    DOB DATE,
+	GPA Decimal(3,2)
+);
+
+-- table to link students and their faculty advisors
+CREATE TABLE Advises
+(
+    S_id INT,
+    F_id INT,
+    FOREIGN KEY (S_id) REFERENCES Student(S_id),
+    FOREIGN KEY (F_id) REFERENCES Faculty(F_id)
 );
 
 -- Subject Table
@@ -59,12 +78,6 @@ CREATE TABLE Course
     Duration VARCHAR(50)
 );
 
--- Department Table
-CREATE TABLE Department 
-(
-    Department_id INT PRIMARY KEY,
-    D_Name VARCHAR(100)
-);
 
 -- Exams Table
 CREATE TABLE Exams 
@@ -155,9 +168,6 @@ CREATE TABLE Conduct
     FOREIGN KEY (Exam_Code) REFERENCES Exams(Exam_Code)
 );
 
-USE UNIVERSITY;
-GO
-
 -- Insert data into Department table
 INSERT INTO Department (Department_id, D_Name) VALUES
 (1, 'Computer Science'),
@@ -166,21 +176,22 @@ INSERT INTO Department (Department_id, D_Name) VALUES
 (4, 'Islamic Studies'),
 (5, 'Business Administration');
 
--- Insert data into Faculty table (Arab names)
-INSERT INTO Faculty (F_id, F_Name, Mobile_No, Department, Salary) VALUES
-(101, 'Dr. Ahmed', '+966501234567', 'Computer Science', 25000.00),
-(102, 'Dr. Fatima', '+966502345678', 'Engineering', 28000.00),
-(103, 'Dr. Khalid', '+966503456789', 'Medicine', 35000.00),
-(104, 'Dr. Aisha', '+966504567890', 'Islamic Studies', 22000.00),
-(105, 'Dr. Omar', '+966505678901', 'Business Administration', 30000.00);
+-- Insert data into Faculty table 
+INSERT INTO Faculty (F_id, F_Name, Mobile_No, Department, Salary,Department_id) 
+VALUES
+(101, 'Dr. Ahmed', '+966501234567', 'Computer Science', 25000.00,1),
+(102, 'Dr. Fatima', '+966502345678', 'Engineering', 28000.00,2),
+(103, 'Dr. Khalid', '+966503456789', 'Medicine', 35000.00,3),
+(104, 'Dr. Aisha', '+966504567890', 'Islamic Studies', 22000.00,4),
+(105, 'Dr. Omar', '+966505678901', 'Business Administration', 30000.00,5);
 
--- Insert data into Student table (Arab names)
-INSERT INTO Student (S_id, Fname, Lname, Phone_no, DOB) VALUES
-(1001, 'Mohammed', 'Al-SUBHI', '+966511234567', '2000-05-15'),
-(1002, 'Layla', 'Al-ABRI', '+966512345678', '2001-07-22'),
-(1003, 'Abdullah', 'Al-Jabri', '+966513456789', '1999-11-30'),
-(1004, 'Noor', 'Al-SALMI', '+966514567890', '2000-03-18'),
-(1005, 'Yousef', 'Al-ALALWI', '+966515678901', '2001-09-10');
+-- Insert data into Student table 
+INSERT INTO Student (S_id, Fname, Lname, Phone_no, DOB, GPA) VALUES
+(1001, 'Mohammed', 'Al-SUBHI', '+966511234567', '2000-05-15',3.6),
+(1002, 'Layla', 'Al-ABRI', '+966512345678', '2001-07-22',2.9),
+(1003, 'Abdullah', 'Al-Jabri', '+966513456789', '1999-11-30',3.2),
+(1004, 'Noor', 'Al-SALMI', '+966514567890', '2000-03-18',2.4),
+(1005, 'Yousef', 'Al-ALALWI', '+966515678901', '2001-09-10',3.8);
 
 -- Insert data into Subject table
 INSERT INTO Subject (Subject_id, Subject_Name) VALUES
@@ -214,6 +225,16 @@ INSERT INTO Exams (Exam_Code, E_Date, E_Time, Room, Department_id) VALUES
 (603, '2023-12-17', '08:00:00', 'Room 310', 3),
 (604, '2023-12-18', '11:00:00', 'Room 412', 4),
 (605, '2023-12-19', '13:30:00', 'Room 105', 5);
+
+
+
+-- Insert data into Advises
+INSERT INTO Advises (S_id, F_id) VALUES
+(1001, 101), 
+(1002, 102), 
+(1003, 103), 
+(1004, 104), 
+(1005, 105); 
 
 -- Insert data into Teach table
 INSERT INTO Teach (F_id, Subject_id) VALUES
@@ -306,6 +327,9 @@ SELECT * FROM Course;
 -- Display all Exams
 SELECT * FROM Exams;
 
+-- Display all advise student
+SELECT * FROM Advises;
+
 -- Display all Teaching assignments
 SELECT * FROM Teach;
 
@@ -329,3 +353,5 @@ SELECT * FROM Student_Department;
 
 -- Display all Exam conducting departments
 SELECT * FROM Conduct;
+
+
